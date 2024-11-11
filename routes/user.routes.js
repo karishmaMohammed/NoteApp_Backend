@@ -22,7 +22,7 @@ userRouter.post("/register", async(req,res)=>{
         let user = new UserModel({name,email,password:hash})
         await user.save();
         res.send({
-            message: "user created",
+            message: "user created successfully!",
             status: 1,
         });
         }catch (error){
