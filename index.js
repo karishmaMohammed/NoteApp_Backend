@@ -1,13 +1,11 @@
 const express = require("express")
 const cors = require("cors")
 const { connection } = require("./db")
-const { noteRouter } = require("./routes/note.routes")
 require("dotenv").config()
+const { noteRouter } = require("./routes/note.routes")
 const {userRouter} = require("./routes/user.routes")
 
 const port = process.env.PORT
-
-
 const app = express()
 
 //middleware
