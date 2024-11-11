@@ -8,8 +8,8 @@ const noteRouter = express.Router();
 noteRouter.use(authenticator);
 
 noteRouter.get("/", async(req, res) => {
-    let token  = req.headers.authorization
-    jwt.verify(token, "karishma", async(err, decode) => {
+    let notes_token  = req.headers.authorization
+    jwt.verify(notes_token, "karishma", async(err, decode) => {
         try {
 
             let data = await NoteModel.find({ user:decode.userId})

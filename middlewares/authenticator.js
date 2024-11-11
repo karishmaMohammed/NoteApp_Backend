@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 function authenticator(req, res, next){
-    const token = req.headers.authorization
-    jwt.verify(token, "karishma",(err,decode)=>{
+    const notes_token = req.headers.authorization
+    jwt.verify(notes_token, "karishma",(err,decode)=>{
         if(err) return res.send({
             message:  "Token is not valid please login",
             status: 2

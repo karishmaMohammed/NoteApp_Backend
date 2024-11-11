@@ -11,43 +11,48 @@ userRouter.get("/", (req,res)=>{
     })
 })
 
-userRouter.post("/register", async(req,res)=>{
-    const {name,email,password} = req.body;
-    bcrypt.hash(password, 10, async function(err, hash){
-        if(err) return res.send({
-            message: "something went wrong",
-            status: 0
-        });
-        try{
-        let user = new UserModel({name,email,password:hash})
-        await user.save();
-        res.send({
-            message: "user created successfully!",
-            status: 1,
-        });
-        }catch (error){
-            res.send({
-                message: error.message,
-                status: 0
-            })
-        }
-    })
-})
+
+
+userRouter.post("/register", async (req, res) => {
+  const { name, email, password } = req.body;
+  
+  try {
+    // Hash password with bcrypt
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Create the user
+    const user = await UserModel.create({ name, email, password: hashedPassword });
+    
+    // Send success response
+    res.status(201).send({
+      message: "User created successfully!",
+      status: 1,
+    });
+  } catch (error) {
+    // Send error response
+    res.status(500).send({
+      message: "Something went wrong",
+      error: error.message,
+      status: 0,
+    });
+  }
+});
+
 userRouter.post("/login", async(req,res) => {
     const {email,password} = req.body;
     let option = {
-        expiresIn: "15m"
+        expiresIn: "15d"
     }
     try{
         let data = await UserModel.find({email});
         if(data.length > 0){
-            let token = jwt.sign({ userId: data[0]._id }, "karishma", option);
+            let notes_token = jwt.sign({ userId: data[0]._id }, "karishma", option);
             bcrypt.compare(password, data[0].password, function(err, result) {
                 if(err) return res.send({message : "something went wrong :" + err, status:0});
                 if(result){
                     res.send({
                         message: "user logged in successfully",
-                        token: token,
+                        notes_token: notes_token,
                         status: 1,
                     });
 
